@@ -125,10 +125,13 @@
         opacity: 1;
       }
       
-      @media only screen and (max-width: 600px) {
+      @media screen and (min-width: 320px) and (max-width: 600px){
         .panel p {
           font-size: 1em;
         }
+        .panel p:nth-child(2) {
+        font-size: 2em;
+      }
       }
     </style>
 
