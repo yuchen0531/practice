@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+<div class="clock">
+    <div class="circle">
+      <div class="sec hand"> </div>
+      <div class="min hand"> </div>
+      <div class="hour hand"> </div>
+    </div>
+  </div>
+</body>
+<style>
+  body {
+  margin: 0;
+  padding: 0;
+}
+.clock {
+  background-color: #c0d6df;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  padding: 30px;
+}
+.circle {
+  border: 5px solid #4f6d7a;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background-color: #95b2b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.circle .hand {
+  position: absolute;
+  transform-origin: bottom center;
+  transition: all 0.5s;
+  transition-timing-function: cubic-bezier(0.1, 2, 0.58, 1);
+}
+.circle .hour {
+  width: 5px;
+  height: 25%;
+  top: 25%;
+  background-color: #537d8d;
+}
+.circle .min {
+  width: 4px;
+  height: 35%;
+  top: 15%;
+  background-color: #729ea1;
+}
+.circle .sec {
+  width: 3px;
+  height: 45%;
+  top: 5%;
+  transition: transform 0.1s;
+  transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
+  background-color: #e8ebe4;
+}
+
+</style>
+<script>
+// 抓取時針 分針 秒針
+const secondHand = document.querySelector('.sec')
+const minuteHand = document.querySelector('.min')
+const hourHand = document.querySelector('.hour')
+
+function clock() {
+    const currentTime = new Date()
+    const second = currentTime.getSeconds()
+    const minute = currentTime.getMinutes()
+    const hour = currentTime.getHours()
+    //180為以原點計算的固定角度'
+    
+    const seconddegree = second * 6
+    console.log(seconddegree)
+    const minutedegree = ((minute / 60) * 360) + (( second / 60) * 6)
+    const hourdegree = ((hour / 12) * 360) + ((minute / 60) * 30)
+    if(seconddegree === 0) {
+      secondHand.style.transition = 'none'
+    } // 拿掉回到原本角度的transition
+  
+  
+    secondHand.style.transform = `rotate(${seconddegree}deg)`
+    minuteHand.style.transform = `rotate(${minutedegree}deg)`
+    hourHand.style.transform = `rotate(${hourdegree}deg)`
+}
+setInterval(clock, 1000)
+</script>
+</html>

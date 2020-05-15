@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  
+<div class="drum">
+    <div class="container">
+      <!--  用data-key來找對應要播放的音檔-->
+      <div class="key" data-key="65"><kbd>A</kbd>
+        <div class="drum-name">clap</div>
+      </div>
+      <div class="key" data-key="83"><kbd>S</kbd>
+        <div class="drum-name">hihat</div>
+      </div>
+      <div class="key" data-key="68"><kbd>D</kbd>
+        <div class="drum-name">kick</div>
+      </div>
+      <div class="key" data-key="70"><kbd>F</kbd>
+        <div class="drum-name">openhat</div>
+      </div>
+      <div class="key" data-key="71"><kbd>G</kbd>
+        <div class="drum-name">boom</div>
+      </div>
+      <div class="key" data-key="72"><kbd>H</kbd>
+        <div class="drum-name">rideasd</div>
+      </div>
+      <div class="key" data-key="74"><kbd>J</kbd>
+        <div class="drum-name">snare</div>
+      </div>
+      <div class="key" data-key="75"><kbd>K</kbd>
+        <div class="drum-name">tom</div>
+      </div>
+      <div class="key" data-key="76"><kbd>L</kbd>
+        <div class="drum-name">tink</div>
+      </div>
+    </div>
+    <audio data-key="65" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/330437/clap.wav"></audio>
+    <audio data-key="83" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/330437/hihat.wav"></audio>
+    <audio data-key="68" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/330437/kick.wav"></audio>
+    <audio data-key="70" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/330437/openhat.wav"></audio>
+    <audio data-key="71" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/330437/boom.wav"></audio>
+    <audio data-key="72" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/330437/ride.wav"></audio>
+    <audio data-key="74" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/330437/snare.wav"></audio>
+    <audio data-key="75" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/330437/tom.wav"></audio>
+    <audio data-key="76" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/330437/tink.wav"></audio>
+  </div>
+</body>
+<style>
+body {
+  margin: 0;
+  padding: 0;
+}
+.drum {
+  background-color: #a8d0db;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+}
+.drum .container {
+  margin: auto;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.drum .key {
+  border: 5px solid #1c4a72;
+  width: 100px;
+  height: 100px;
+  background-color: #516b81;
+  margin-right: 25px;
+  margin-top: 25px;
+  transition: all 0.3s;
+}
+.drum .playing {
+  transform: scale(1.1);
+  border-color: #ff0;
+  box-shadow: 10px 6px 8px rgba(0,0,0,0.5);
+}
+.drum .drum-name {
+  text-align: center;
+}
+
+</style>
+<script>
+
+function play(e){
+    // 選取音檔
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`)
+    // 選取div
+    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`)
+    if(!audio) return
+   //	属性设置或返回音频播放的当前位置（以秒计）
+  audio.currentTime = 0
+  audio.play()
+  key.classList.add('playing')
+}
+
+function removeTransition(e) {
+  console.log(this)
+  if(e.propertyName !== "transform") return
+  this.classList.remove('playing')
+}
+
+const keys = document.querySelectorAll('.key')
+// 每個key 增加監聽CSS transition结束，接著作用移除方法removeTransition
+// transitionend 事件会在 CSS transition 结束后触发
+keys.forEach(key => key.addEventListener('transitionend', removeTransition))
+// 偵測鍵盤按下
+window.addEventListener('keydown',play)
+
+</script>
+</html>
