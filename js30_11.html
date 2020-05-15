@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>my video</title>
+  <link rel="stylesheet" href="./css/js30D11.css">
+</head>
+<body>
+  <div class="player">
+      <video class="player__video viewer" src="https://player.vimeo.com/external/194837908.sd.mp4?s=c350076905b78c67f74d7ee39fdb4fef01d12420&profile_id=164"></video>
+      <div class="player__controls">
+        <div class="progress">
+          <div class="progress__filled"></div>
+        </div>
+        <button data-skip="-10" class="player__button"> << </button>
+        <button class="player__button toggle" title="Toggle Play">►</button>
+        <button data-skip="25" class="player__button"> >> </button>
+        <button class="player__button">vol</button>
+        <input type="range" name="volume" class="player__slider" min="0" max="1" step="0.05" value="0.1">
+        <button class="player__button">speed</button>
+        <input type="range" name="playbackRate" class="player__slider" min="0.5" max="2" step="0.1" value="1">
+        <button class="player__button full-screen" style="font-size: 24px;">&#x25AD</button>
+      </div>
+    </div>
+</body>
+<script>
+  const player = document.querySelector('.player') //容器
+  const video = player.querySelector('.viewer') //影片
+  const progress = player.querySelector('.progress') //進度條
+  const progressBar = player.querySelector('.progress__filled') //當前進度
+  const toggle = player.querySelector('.toggle') //播放鈕 
+  const skipButtons = player.querySelectorAll('[data-skip]') //快轉按鈕
+  const ranges = player.querySelectorAll('.player__slider') //範圍輸入框
+  const full = player.querySelector('.full-screen') //全螢幕
+   // '►':'❚❚' 
+  // 播放 & 暫停 || 倒退 & 快轉 || 聲音 & 速度 || 進度條 (flexBasis & 移動) || 全螢幕 requestFullscreen
+  function playvideo(){
+    const method = video.paused ? 'play':'pause'
+    video[method]()
+  }
+  function iconchange(){
+    const icon = video.paused ? '►': '❚❚'
+    toggle.textContent = icon
+  }
+  function skip(){
+    video.currentTime += Number(this.dataset.skip)
+  }
+  function changerange(){
+    video[this.name] = this.value
+  }
+  function progresschange(){
+    const percent = (video.currentTime/video.duration)*100
+    progressBar.style.flexBasis = `${percent}%`
+  }
+  function scrub(e){
+    const videotime = (e.offsetX/progress.offsetWidth) * video.duration
+    video.currentTime = videotime
+  }
+  function fullscreen(){
+    if (video.requestFullscreen) {
+      video.requestFullscreen()
+    } else if (video.msRequestFullscreen) {
+      video.msRequestFullscreen()
+    } else if (video.mozRequestFullScreen) {
+      video.mozRequestFullScreen()
+    } else if (video.webkitRequestFullscreen) {
+      video.webkitRequestFullscreen()
+    }
+  }
+  let mousedown = false
+  video.addEventListener('click', playvideo)
+  toggle.addEventListener('click', playvideo)
+  video.addEventListener('play',iconchange)
+  video.addEventListener('pause',iconchange)
+  skipButtons.forEach( skipbtn => skipbtn.addEventListener('click', skip))
+  ranges.forEach( range => range.addEventListener('change', changerange))
+  ranges.forEach( range => range.addEventListener('mousemove', changerange))
+  video.addEventListener('timeupdate', progresschange)
+  progress.addEventListener('mousedown', ()=> { mousedown = true })
+  progress.addEventListener('mouseup', ()=> { mousedown = false })
+  progress.addEventListener('mousemove',(e)=>{ mousedown && scrub(e) })
+  full.addEventListener('click', fullscreen)
+</script>
+</html>
